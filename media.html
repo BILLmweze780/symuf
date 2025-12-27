@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Média | SYMUF.ORG</title>
+    <link href="img/enligne-jour1-17-scaled.jpg" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="logo-SYMUF-new-ok.jpg" >
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="about.html">Apropos</a></li>
+                    <li><a href="activities.html">Article</a></li>
+                    <li><a href="media.html" class="active">Emissions</a></li>
+                    <li><a href="contact.html">contacte-nous</a></li>
+                    <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-banner bg-dark animate-on-scroll">
+            <div class="container">
+                <h1>Galerie Multimédia</h1>
+                <p>Voyez par vous-même l'impact de nos programmes sur le terrain.</p>
+            </div>
+        </section>
+
+      
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">SYMUF</div>
+                    <p>Une organisation engagée pour le développement durable.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="about.html">À propos</a></li>
+                        <li><a href="activities.html">Nos projets</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <ul class="contact-list">
+                        <li><i class="fa-solid fa-envelope"></i> symufcoord@symuf.org</li>
+                        <li><i class="fa-solid fa-phone"></i> +243 830006150 </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Symuf.org.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <div id="video-lightbox" class="video-lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn">&times;</span>
+            <div id="video-embed-container" class="video-embed-container">
+                </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ---------------------------------------------------------------------
+            // LOGIQUE DE LA LIGHTBOX VIDÉO
+            // ---------------------------------------------------------------------
+            const videoLinks = document.querySelectorAll('.open-video-modal');
+            const lightbox = document.getElementById('video-lightbox');
+            const closeBtn = document.querySelector('#video-lightbox .close-btn');
+            const videoContainer = document.getElementById('video-embed-container');
+
+            // 1. Fonction pour fermer la modale
+            function closeLightbox() {
+                // Enlève le contenu pour arrêter la lecture
+                videoContainer.innerHTML = ''; 
+                // Cache la modale
+                lightbox.classList.remove('active');
+                // Réactive le défilement du corps
+                document.body.style.overflow = '';
+            }
+
+            // 2. Fonction pour ouvrir la modale
+            videoLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Empêche le lien de naviguer
+                    const videoUrl = link.getAttribute('data-video-url');
+                    
+                    if (videoUrl) {
+                        // Crée l'élément iframe
+                        const iframe = document.createElement('iframe');
+                        iframe.src = videoUrl;
+                        // Nécessaire pour l'autoplay
+                        iframe.setAttribute('allow', 'autoplay; encrypted-media'); 
+                        iframe.setAttribute('allowfullscreen', '');
+                        
+                        // Vide et insère la nouvelle iframe
+                        videoContainer.innerHTML = '';
+                        videoContainer.appendChild(iframe);
+                        
+                        // Affiche la modale et désactive le défilement du corps
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            // Fermeture par le bouton X
+            closeBtn.addEventListener('click', closeLightbox);
+
+            // Fermeture en cliquant en dehors de la vidéo (l'overlay)
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // Fermeture par la touche Échap
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
+            });
+            
+            // ---------------------------------------------------------------------
+            // LOGIQUE EXISTANTE (Menu Mobile / Thème / Scroll Reveal)
+            // ---------------------------------------------------------------------
+            
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mainNav = document.querySelector('.main-nav');
+
+            if (mobileMenuToggle && mainNav) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mainNav.classList.toggle('active');
+                });
+            }
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const icon = themeToggle.querySelector('i');
+                    if (currentTheme === 'dark') {
+                        document.documentElement.removeAttribute('data-theme');
+                        icon.className = 'fa-solid fa-moon';
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        icon.className = 'fa-solid fa-sun';
+                    }
+                });
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+            });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
